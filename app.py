@@ -7,7 +7,34 @@ import sqlite3
 from flask import g
 
 FILENAME = "/data/todo.json" if "AMVERA" in os.environ else "todo.json"
+USERS = "/data/users.json" if "AMVERA" in os.environ else "users.json"
+TODOS = "/data/todos.json" if "AMVERA" in os.environ else "todos.json"
 DATABASE = "/data/my.db" if "AMVERA" in os.environ else "my.db"
+
+def generate_uuid():
+   return str(uuid.uuid4())
+
+def get_users():
+   try:
+         with open(USERS, "r", encoding="utf-8") as f:
+            return json.load(f)
+   except FileNotFoundError:
+         return []
+
+def save_users(data):
+   with open(USERS, "w", encoding="utf-8") as f:
+       json.dump(data, f)
+
+def get_todos():
+   try:
+         with open(TODOS, "r", encoding="utf-8") as f:
+            return json.load(f)
+   except FileNotFoundError:
+         return []
+
+def save_todos(data):
+   with open(TODOS, "w", encoding="utf-8") as f:
+       json.dump(data, f)
 
 def get_data():
    try:
@@ -78,9 +105,6 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
-
-def generate_uuid():
-   return str(uuid.uuid4())
 
 if __name__ == "__main__":
    app.run(port=8080)
