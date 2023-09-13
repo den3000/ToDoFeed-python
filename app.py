@@ -54,8 +54,8 @@ cors = CORS(app)
 def index():
    return "TODO App"
 
-@app.route("/register")
-def get_all_todo():
+@app.route("/register", methods=["POST"])
+def register():
    body = request.json
    if body is None:
       abort(400)
@@ -83,6 +83,12 @@ def get_all_todo():
    del user["password"]
    
    return user
+
+@app.route("/get_all_users")
+def get_all_users():
+   users = get_all_users()
+   # remove some fields
+   return users
 
 @app.route("/todo")
 def get_all_todo():
