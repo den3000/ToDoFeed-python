@@ -80,7 +80,7 @@ def close_connection(exception):
         db.close()
 
 def generate_uuid():
-    str(uuid.uuid4())
+   return str(uuid.uuid4())
 
 if __name__ == "__main__":
    app.run(port=8080)
