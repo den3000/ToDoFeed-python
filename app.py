@@ -161,6 +161,34 @@ def add_todo():
    
    return todo
 
+@app.route("/get_my_todos")
+def get_my_todos():
+   body = request.json
+   if body is None:
+      abort(400)
+
+   userId = body['token'].split(':')[1]
+
+   todos = get_todos()
+
+   myTodos  = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
+   
+   return myTodos
+
+@app.route("/get_my_and_public_todos")
+def get_my_and_public_todos():
+   body = request.json
+   if body is None:
+      abort(400)
+
+   userId = body['token'].split(':')[1]
+
+   todos = get_todos()
+
+   myAndPubTodos  = [item for (index, item) in enumerate(todos) if (item['userId'] == userId or item['visibility'] == 'public')]
+   
+   return myAndPubTodos
+
 # ----------------------------------------------------------------------------
 
 @app.route("/todo")
