@@ -161,7 +161,7 @@ def add_todo():
    
    return todo
 
-@app.route("/get_my_todos")
+@app.route("/get_my_todos", methods=["POST"])
 def get_my_todos():
    body = request.json
    if body is None:
@@ -175,7 +175,7 @@ def get_my_todos():
    
    return myTodos
 
-@app.route("/get_my_and_public_todos")
+@app.route("/get_my_and_public_todos", methods=["POST"])
 def get_my_and_public_todos():
    body = request.json
    if body is None:
