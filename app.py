@@ -1,3 +1,4 @@
+import uuid
 import os
 import json
 from flask import Flask, request, abort
@@ -46,7 +47,10 @@ def add_new_todo():
    data = get_data()
    data.append(new_todo)
    save_data(data)
-   return "OK", 201
+   return json.dumps({
+      "result":"ok", 
+      "uuid": str(uuid.uuid4)
+   }), 201
    
 @app.route("/todo/<int:id>", methods=["PUT"])
 def update_todo(id):
@@ -58,7 +62,10 @@ def update_todo(id):
        abort(400)
    data[id] = updated_todo
    save_data(data)
-   return "OK"
+   return json.dumps({
+      "result":"ok", 
+      "uuid": str(uuid.uuid4)
+   })
 
 def get_db():
     db = getattr(g, '_database', None)
