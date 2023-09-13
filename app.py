@@ -54,6 +54,36 @@ cors = CORS(app)
 def index():
    return "TODO App"
 
+@app.route("/register")
+def get_all_todo():
+   body = request.json
+   if body is None:
+      abort(400)
+
+   password = body['password']
+   firstName = body['firstName']
+   lastName = body['lastName']
+   about = body['about']
+   id = generate_uuid()
+   token = generate_uuid() + ':' + id
+
+   user = {
+       "id" : id,
+       "token" : token,
+       "password" : password,
+       "firstName" : firstName,
+       "lastName" : lastName,
+       "about" : about,
+   }
+
+   users = get_users()
+   users.append(user)
+   save_users(users)
+
+   del user["password"]
+   
+   return user
+
 @app.route("/todo")
 def get_all_todo():
    con = get_db()
