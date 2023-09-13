@@ -86,7 +86,7 @@ def register():
 
 @app.route("/get_all_users")
 def get_all_users():
-   users = get_all_users()
+   users = get_users()
    # remove some fields
    return users
 
