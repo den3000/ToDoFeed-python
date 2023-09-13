@@ -124,6 +124,15 @@ def edit_profile():
    
    return user
 
+@app.route("/erase_all")
+def erase_all():
+   save_users([])
+   save_todos([])
+
+   return json.dumps({
+      "result":"ok"
+   })
+
 # ----------------------------------------------------------------------------
 
 @app.route("/todo")
