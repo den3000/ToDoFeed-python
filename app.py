@@ -95,7 +95,7 @@ def get_all_users():
    return users
 
 @app.route("/edit_profile", methods=["POST"])
-def register():
+def edit_profile():
    body = request.json
    if body is None:
       abort(400)
