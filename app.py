@@ -49,7 +49,7 @@ def add_new_todo():
    save_data(data)
    return json.dumps({
       "result":"ok", 
-      "uuid": str(uuid.uuid4)
+      "uuid": str(uuid.uuid4())
    }), 201
    
 @app.route("/todo/<int:id>", methods=["PUT"])
@@ -64,7 +64,7 @@ def update_todo(id):
    save_data(data)
    return json.dumps({
       "result":"ok", 
-      "uuid": str(uuid.uuid4)
+      "uuid": str(uuid.uuid4())
    })
 
 def get_db():
