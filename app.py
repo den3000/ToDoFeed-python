@@ -94,6 +94,38 @@ def get_all_users():
 
    return users
 
+@app.route("/edit_profile", methods=["POST"])
+def register():
+   body = request.json
+   if body is None:
+      abort(400)
+
+   token = body['token']
+   firstName = body['firstName']
+   lastName = body['lastName']
+   about = body['about']
+
+   userId = token.split(':')[1]
+
+   users = get_users()
+
+   index  = [index for (index, item) in enumerate(users) if item['id'] == userId][0]
+   user = users[index]
+
+   user['firstName'] = firstName
+   user['lastName'] = lastName
+   user['about'] = about
+
+   users[index] = user
+   save_users(users)
+
+   del user['token']
+   del user['password']
+   
+   return user
+
+# ----------------------------------------------------------------------------
+
 @app.route("/todo")
 def get_all_todo():
    con = get_db()
