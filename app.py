@@ -49,7 +49,7 @@ def add_new_todo():
    save_data(data)
    return json.dumps({
       "result":"ok", 
-      "uuid": str(uuid.uuid4())
+      "uuid": generate_uuid()
    }), 201
    
 @app.route("/todo/<int:id>", methods=["PUT"])
@@ -64,7 +64,7 @@ def update_todo(id):
    save_data(data)
    return json.dumps({
       "result":"ok", 
-      "uuid": str(uuid.uuid4())
+      "uuid": generate_uuid()
    })
 
 def get_db():
@@ -78,6 +78,9 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
+
+def generate_uuid():
+    str(uuid.uuid4())
 
 if __name__ == "__main__":
    app.run(port=8080)
