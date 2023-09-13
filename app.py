@@ -133,6 +133,34 @@ def erase_all():
       "result":"ok"
    })
 
+@app.route("/add_todo", methods=["POST"])
+def add_todo():
+   body = request.json
+   if body is None:
+      abort(400)
+   
+   id = generate_uuid()
+   userId = body['token'].split(':')[1]
+   title = body['title']
+   description = body['description']
+   status = body['status']
+   visibility = body['visibility']
+
+   todo = {
+       "id" : id,
+       "userId" : userId,
+       "title" : title,
+       "description" : description,
+       "status" : status,
+       "visibility" : visibility,
+   }
+
+   todos = get_todos()
+   todos.append(todo)
+   save_todos(todos)
+   
+   return todo
+
 # ----------------------------------------------------------------------------
 
 @app.route("/todo")
