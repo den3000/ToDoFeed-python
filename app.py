@@ -87,7 +87,11 @@ def register():
 @app.route("/get_all_users")
 def get_all_users():
    users = get_users()
-   # remove some fields
+
+   for user in users:
+      del user['token']
+      del user['password']
+
    return users
 
 @app.route("/todo")
