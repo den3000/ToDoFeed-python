@@ -2,8 +2,11 @@ import os
 import json
 from flask import Flask, request, abort
 from flask_cors import CORS
+import sqlite3
+from flask import g
 
 FILENAME = "/data/todo.json" if "AMVERA" in os.environ else "todo.json"
+DATABASE = "/data/my.db" if "AMVERA" in os.environ else "my.db"
 
 def get_data():
    try:
@@ -25,6 +28,7 @@ def index():
 
 @app.route("/todo")
 def get_all_todo():
+   con = get_db()
    return get_data()
 
 @app.route("/todo/<int:id>")
@@ -55,6 +59,18 @@ def update_todo(id):
    data[id] = updated_todo
    save_data(data)
    return "OK"
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 if __name__ == "__main__":
    app.run(port=8080)
