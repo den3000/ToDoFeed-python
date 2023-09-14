@@ -66,7 +66,7 @@ def register():
    indexes  = [index for (index, item) in enumerate(users) if item['password'] == password]
    if len(indexes) != 0:
        return json.dumps({
-         "result":"existing password"
+         "error":"existing password"
       })
    
    firstName = body['firstName']
@@ -103,7 +103,7 @@ def login():
    indexes  = [index for (index, item) in enumerate(users) if item['password'] == password]
    if len(indexes) != 1:
        return json.dumps({
-         "result":"no user with such password"
+         "error":"no user with such password"
       })
 
    index  = indexes[0]
@@ -115,10 +115,7 @@ def login():
 
 @app.route("/get_all_users")
 def get_all_users():
-   print('get_all_users')
    token = request.args.get('token', default="", type=str)
-   print('token ' + token)
-   
    userId = token.split('-devider-')[1]
 
    users = get_users()
