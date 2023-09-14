@@ -103,7 +103,10 @@ def login():
 
 @app.route("/get_all_users")
 def get_all_users():
+   print('get_all_users')
    token = request.args.get('token')
+   print('token ' + token)
+   
    userId = token.split(':')[1]
 
    users = get_users()
