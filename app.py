@@ -189,7 +189,7 @@ def add_todo():
    
    return todo
 
-@app.route("/get_my_todos", methods=["POST"])
+@app.route("/get_my_todos")
 def get_my_todos():
    token = request.args.get('token', default="", type=str)
    userId = token.split('-devider-')[1]
@@ -204,7 +204,7 @@ def get_my_todos():
    
    return myTodos
 
-@app.route("/get_my_and_public_todos", methods=["POST"])
+@app.route("/get_my_and_public_todos")
 def get_my_and_public_todos():
    token = request.args.get('token', default="", type=str)
    userId = token.split('-devider-')[1]
