@@ -251,12 +251,21 @@ def edit_todo():
 
 @app.route("/erase_all")
 def erase_all():
-   save_users([])
-   save_todos([])
+   token = request.args.get('token', default="", type=str)
+   userId = token.split('-devider-')[1]
 
-   return json.dumps({
-      "result":"ok"
-   })
+   users = get_users()
+   indexes = [index for (index, item) in enumerate(users) if item['id'] == userId]
+   if len(indexes) == 1 and indexes[0] == 0:
+      save_users([])
+      save_todos([])
+      return json.dumps({
+         "result":"ok"
+      }) 
+   else:
+       return json.dumps({
+         "error":"not an admin"
+      }) 
 
 # ----------------------------------------------------------------------------
 
