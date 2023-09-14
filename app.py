@@ -194,10 +194,6 @@ def get_my_todos():
    token = request.args.get('token', default="", type=str)
    userId = token.split('-devider-')[1]
 
-   body = request.json
-   if body is None:
-      abort(400)
-
    todos = get_todos()
 
    myTodos = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
@@ -208,10 +204,6 @@ def get_my_todos():
 def get_my_and_public_todos():
    token = request.args.get('token', default="", type=str)
    userId = token.split('-devider-')[1]
-
-   body = request.json
-   if body is None:
-      abort(400)
 
    todos = get_todos()
 
