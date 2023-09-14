@@ -65,7 +65,7 @@ def register():
    lastName = body['lastName']
    about = body['about']
    id = generate_uuid()
-   token = generate_uuid() + ':' + id
+   token = generate_uuid() + '-devider-' + id
 
    user = {
        "id" : id,
@@ -107,10 +107,10 @@ def get_all_users():
    token = request.args.get('token', default="", type=str)
    print('token ' + token)
    
-   userId = token.split('devider')[1]
+   userId = token.split('-devider-')[1]
 
    users = get_users()
-   indexs  = [index for (index, item) in enumerate(users) if item['userId'] == userId]
+   indexs  = [index for (index, item) in enumerate(users) if item['id'] == userId]
    if len(indexs) != 1:
        return []
    
