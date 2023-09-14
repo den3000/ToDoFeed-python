@@ -84,6 +84,23 @@ def register():
    
    return user
 
+@app.route("/login", methods=["POST"])
+def login():
+   body = request.json
+   if body is None:
+      abort(400)
+
+   password = body['password']
+
+   users = get_users()
+
+   index  = [index for (index, item) in enumerate(users) if item['password'] == password][0]
+   user = users[index]
+
+   del user['password']
+   
+   return user
+
 @app.route("/get_all_users")
 def get_all_users():
    users = get_users()
