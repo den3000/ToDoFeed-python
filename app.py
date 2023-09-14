@@ -101,10 +101,15 @@ def login():
    
    return user
 
-@app.route("/get_all_users")
-def get_all_users():
-   users = get_users()
+@app.route("/get_all_users/<string:token>")
+def get_all_users(token):
+   userId = token.split(':')[1]
 
+   users = get_users()
+   indexs  = [index for (index, item) in enumerate(users) if item['userId'] == userId]
+   if len(indexs) != 1:
+       return []
+   
    for user in users:
       del user['token']
       del user['password']
