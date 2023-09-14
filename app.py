@@ -204,7 +204,7 @@ def edit_todo():
 
    todos = get_todos()
 
-   index  = [index for (index, item) in enumerate(todos) if (item['userId'] == userId or item['id'] == id)][0]
+   index  = [index for (index, item) in enumerate(todos) if (item['userId'] == userId and item['id'] == id)][0]
    todo = todos[index]
 
    todo['title'] = title
