@@ -131,20 +131,20 @@ def get_all_users():
 
 @app.route("/edit_profile", methods=["POST"])
 def edit_profile():
+   token = request.args.get('token', default="", type=str)
+   userId = token.split('-devider-')[1]
+
    body = request.json
    if body is None:
       abort(400)
 
-   token = body['token']
    firstName = body['firstName']
    lastName = body['lastName']
    about = body['about']
 
-   userId = token.split(':')[1]
-
    users = get_users()
 
-   index  = [index for (index, item) in enumerate(users) if item['id'] == userId][0]
+   index = [index for (index, item) in enumerate(users) if item['id'] == userId][0]
    user = users[index]
 
    user['firstName'] = firstName
@@ -159,23 +159,16 @@ def edit_profile():
    
    return user
 
-@app.route("/erase_all")
-def erase_all():
-   save_users([])
-   save_todos([])
-
-   return json.dumps({
-      "result":"ok"
-   })
-
 @app.route("/add_todo", methods=["POST"])
 def add_todo():
+   token = request.args.get('token', default="", type=str)
+   userId = token.split('-devider-')[1]
+
    body = request.json
    if body is None:
       abort(400)
    
    id = generate_uuid()
-   userId = body['token'].split(':')[1]
    title = body['title']
    description = body['description']
    status = body['status']
@@ -198,25 +191,27 @@ def add_todo():
 
 @app.route("/get_my_todos", methods=["POST"])
 def get_my_todos():
+   token = request.args.get('token', default="", type=str)
+   userId = token.split('-devider-')[1]
+
    body = request.json
    if body is None:
       abort(400)
 
-   userId = body['token'].split(':')[1]
-
    todos = get_todos()
 
-   myTodos  = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
+   myTodos = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
    
    return myTodos
 
 @app.route("/get_my_and_public_todos", methods=["POST"])
 def get_my_and_public_todos():
+   token = request.args.get('token', default="", type=str)
+   userId = token.split('-devider-')[1]
+
    body = request.json
    if body is None:
       abort(400)
-
-   userId = body['token'].split(':')[1]
 
    todos = get_todos()
 
@@ -226,11 +221,13 @@ def get_my_and_public_todos():
 
 @app.route("/edit_todo", methods=["POST"])
 def edit_todo():
+   token = request.args.get('token', default="", type=str)
+   userId = token.split('-devider-')[1]
+
    body = request.json
    if body is None:
       abort(400)
 
-   userId = body['token'].split(':')[1]
    id = body['id']
    title = body['title']
    description = body['description']
@@ -251,6 +248,15 @@ def edit_todo():
    save_todos(todos)
 
    return todo
+
+@app.route("/erase_all")
+def erase_all():
+   save_users([])
+   save_todos([])
+
+   return json.dumps({
+      "result":"ok"
+   })
 
 # ----------------------------------------------------------------------------
 
