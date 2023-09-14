@@ -61,6 +61,14 @@ def register():
       abort(400)
 
    password = body['password']
+
+   users = get_users()
+   indexes  = [index for (index, item) in enumerate(users) if item['password'] == password]
+   if len(indexes) != 0:
+       return json.dumps({
+         "result":"existing password"
+      })
+   
    firstName = body['firstName']
    lastName = body['lastName']
    about = body['about']
@@ -76,7 +84,6 @@ def register():
        "about" : about,
    }
 
-   users = get_users()
    users.append(user)
    save_users(users)
 
@@ -93,8 +100,13 @@ def login():
    password = body['password']
 
    users = get_users()
+   indexes  = [index for (index, item) in enumerate(users) if item['password'] == password]
+   if len(indexes) != 1:
+       return json.dumps({
+         "result":"no user with such password"
+      })
 
-   index  = [index for (index, item) in enumerate(users) if item['password'] == password][0]
+   index  = indexes[0]
    user = users[index]
 
    del user['password']
