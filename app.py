@@ -107,7 +107,7 @@ def get_all_users():
    token = request.args.get('token', default="", type=str)
    print('token ' + token)
    
-   userId = token.split(':')[1]
+   userId = token.split('devider')[1]
 
    users = get_users()
    indexs  = [index for (index, item) in enumerate(users) if item['userId'] == userId]
