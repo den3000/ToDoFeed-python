@@ -189,6 +189,34 @@ def get_my_and_public_todos():
    
    return myAndPubTodos
 
+@app.route("/edit_todo", methods=["POST"])
+def edit_todo():
+   body = request.json
+   if body is None:
+      abort(400)
+
+   userId = body['token'].split(':')[1]
+   id = body['id']
+   title = body['title']
+   description = body['description']
+   status = body['status']
+   visibility = body['visibility']
+
+   todos = get_todos()
+
+   index  = [index for (index, item) in enumerate(todos) if (item['userId'] == userId or item['id'] == id)][0]
+   todo = todos[index]
+
+   todo['title'] = title
+   todo['description'] = description
+   todo['status'] = status
+   todo['visibility'] = visibility
+
+   todos[index] = todo
+   save_todos(todos)
+
+   return todo
+
 # ----------------------------------------------------------------------------
 
 @app.route("/todo")
