@@ -101,8 +101,9 @@ def login():
    
    return user
 
-@app.route("/get_all_users/<string:token>")
-def get_all_users(token):
+@app.route("/get_all_users")
+def get_all_users():
+   token = request.args.get('token')
    userId = token.split(':')[1]
 
    users = get_users()
