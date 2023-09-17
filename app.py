@@ -189,27 +189,55 @@ def add_todo():
    
    return todo
 
-@app.route("/get_my_todos")
-def get_my_todos():
+@app.route("/get_todos_list")
+def get_todos_list():
    token = request.args.get('token', default="", type=str)
    userId = token.split('-devider-')[1]
 
+   body = request.json
+   if body is None:
+      abort(400)
+
+   isOnlyMy = body['isOnlyMy']
+   ownerId = body['ownerId']
+
    todos = get_todos()
 
-   myTodos = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
+   toDosList = []
+   if isOnlyMy:
+      toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
+   elif not isOnlyMy and not ownerId:
+       toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
+   else:
+      toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == ownerId and item['visibility'] == 'public']
    
-   return myTodos
+   return toDosList
 
-@app.route("/get_my_and_public_todos")
-def get_my_and_public_todos():
+@app.route("/get_todo_details")
+def get_todo_details():
    token = request.args.get('token', default="", type=str)
    userId = token.split('-devider-')[1]
 
+   body = request.json
+   if body is None:
+      abort(400)
+
+   toDoId = body['toDoId']
+
    todos = get_todos()
 
-   myAndPubTodos  = [item for (index, item) in enumerate(todos) if (item['userId'] == userId or item['visibility'] == 'public')]
-   
-   return myAndPubTodos
+   todo = [item for (index, item) in enumerate(todos) if (item['toDoId'] == toDoId)][0]
+
+   if todo['userId'] == userId:
+       todo['isEditable'] = True
+       return todo
+   elif todo['visibility'] == 'public':
+       todo['isEditable'] = False
+       return todo
+   else:
+      return json.dumps({
+         "error":"no access to this item"
+      }) 
 
 @app.route("/edit_todo", methods=["POST"])
 def edit_todo():
@@ -255,7 +283,7 @@ def erase_all():
          "result":"ok"
       }) 
    else:
-       return json.dumps({
+      return json.dumps({
          "error":"not an admin"
       }) 
 
