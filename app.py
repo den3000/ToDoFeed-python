@@ -213,7 +213,7 @@ def get_todos_list():
    
    return toDosList
 
-@app.route("/get_todo_details")
+@app.route("/get_todo_details", methods=["POST"])
 def get_todo_details():
    token = request.args.get('token', default="", type=str)
    userId = token.split('-devider-')[1]
