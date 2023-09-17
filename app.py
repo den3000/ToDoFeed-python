@@ -198,16 +198,16 @@ def get_todos_list():
    if body is None:
       abort(400)
 
-   isOnlyMy = body['isOnlyMy']
-   ownerId = body['ownerId']
+   isOnlyMy = body.get('isOnlyMy', default=False, type=bool)
+   ownerId = body.get('ownerId', default="", type=str)
 
    todos = get_todos()
 
    toDosList = []
-   if isOnlyMy:
+   if isOnlyMy == True:
       toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
-   elif not isOnlyMy and not ownerId:
-       toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
+   elif isOnlyMy == False and not ownerId:
+      toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
    else:
       toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == ownerId and item['visibility'] == 'public']
    
