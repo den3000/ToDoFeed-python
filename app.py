@@ -198,8 +198,8 @@ def get_todos_list():
    if body is None:
       abort(400)
 
-   isOnlyMy = body.get('isOnlyMy', default=False, type=bool)
-   ownerId = body.get('ownerId', default="", type=str)
+   isOnlyMy = body['isOnlyMy']
+   ownerId = body['ownerId']
 
    todos = get_todos()
 
