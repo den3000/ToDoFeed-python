@@ -189,7 +189,7 @@ def add_todo():
    
    return todo
 
-@app.route("/get_todos_list")
+@app.route("/get_todos_list", methods=["POST"])
 def get_todos_list():
    token = request.args.get('token', default="", type=str)
    userId = token.split('-devider-')[1]
@@ -203,12 +203,15 @@ def get_todos_list():
 
    todos = get_todos()
 
+   toDosList = []
    if isOnlyMy == True:
-      return [item for (index, item) in enumerate(todos) if item['userId'] == userId]
+      toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
    elif isOnlyMy == False and not ownerId:
-      return [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
+      toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
    else:
-      return [item for (index, item) in enumerate(todos) if item['userId'] == ownerId and item['visibility'] == 'public']
+      toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == ownerId and item['visibility'] == 'public']
+   
+   return toDosList
 
 @app.route("/get_todo_details")
 def get_todo_details():
