@@ -203,15 +203,12 @@ def get_todos_list():
 
    todos = get_todos()
 
-   toDosList = []
    if isOnlyMy == True:
-      toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
+      return [item for (index, item) in enumerate(todos) if item['userId'] == userId]
    elif isOnlyMy == False and not ownerId:
-      toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
+      return [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
    else:
-      toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == ownerId and item['visibility'] == 'public']
-   
-   return toDosList
+      return [item for (index, item) in enumerate(todos) if item['userId'] == ownerId and item['visibility'] == 'public']
 
 @app.route("/get_todo_details")
 def get_todo_details():
