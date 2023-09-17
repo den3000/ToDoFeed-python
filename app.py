@@ -226,7 +226,7 @@ def get_todo_details():
 
    todos = get_todos()
 
-   todo = [item for (index, item) in enumerate(todos) if (item['toDoId'] == toDoId)][0]
+   todo = [item for (index, item) in enumerate(todos) if (item['id'] == toDoId)][0]
 
    if todo['userId'] == userId:
        todo['isEditable'] = True
