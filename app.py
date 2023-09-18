@@ -102,7 +102,7 @@ def login():
    users = get_users()
    indexes  = [index for (index, item) in enumerate(users) if item['password'] == password]
    if len(indexes) != 1:
-       return json.dumps({
+      return json.dumps({
          "error":"no user with such password"
       })
 
@@ -128,6 +128,29 @@ def get_all_users():
       del user['password']
 
    return users
+
+@app.route("/get_user_details", methods=["POST"])
+def get_user_details():
+   token = request.args.get('token', default="", type=str)
+   userId = token.split('-devider-')[1]
+
+   body = request.json
+   if body is None:
+      abort(400)
+   targetUserId = body['userid']
+
+   users = get_users()
+   indexs  = [index for (index, item) in enumerate(users) if item['id'] == targetUserId]
+   if len(indexs) != 1:
+         return json.dumps({
+         "error":"no user with such id or multiple users with such id"
+      })
+   
+   user = users[indexs[0]]
+   del user['token']
+   del user['password']
+
+   return user
 
 @app.route("/edit_profile", methods=["POST"])
 def edit_profile():
@@ -207,6 +230,7 @@ def get_todos_list():
    if isOnlyMy == True:
       toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
    elif isOnlyMy == False and not ownerId:
+      # toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public' or item['userId'] == userId ]
       toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
    else:
       toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == ownerId and item['visibility'] == 'public']
