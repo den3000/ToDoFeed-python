@@ -227,13 +227,13 @@ def get_todos_list():
    todos = get_todos()
 
    toDosList = []
-   if isOnlyMy == True:
-      toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
-   elif isOnlyMy == False and not ownerId:
-      # toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public' or item['userId'] == userId ]
-      toDosList = [item for (index, item) in enumerate(todos) if item['visibility'] == 'public']
-   else:
+   if ownerId:
       toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == ownerId and item['visibility'] == 'public']
+   else:
+      if isOnlyMy == True:
+         toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == userId]
+      else:
+         toDosList = [item for (index, item) in enumerate(todos) if item['userId'] == userId or item['visibility'] == 'public']
    
    return toDosList
 
