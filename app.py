@@ -152,6 +152,24 @@ def get_user_details():
 
    return user
 
+@app.route("/get_profile")
+def get_profile():
+   token = request.args.get('token', default="", type=str)
+   userId = token.split('-devider-')[1]
+
+   users = get_users()
+   indexs  = [index for (index, item) in enumerate(users) if item['id'] == userId]
+   if len(indexs) != 1:
+         return json.dumps({
+         "error":"no user with such id or multiple users with such id"
+      })
+   
+   user = users[indexs[0]]
+   del user['token']
+   del user['password']
+   user['isAdmin'] = indexs[0] == 0
+   return user
+
 @app.route("/edit_profile", methods=["POST"])
 def edit_profile():
    token = request.args.get('token', default="", type=str)
