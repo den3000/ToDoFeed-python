@@ -137,7 +137,7 @@ def get_user_details():
    body = request.json
    if body is None:
       abort(400)
-   targetUserId = body['userid']
+   targetUserId = body['userId']
 
    users = get_users()
    indexs  = [index for (index, item) in enumerate(users) if item['id'] == targetUserId]
